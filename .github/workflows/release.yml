@@ -27,13 +27,13 @@ jobs:
             target: x86_64-unknown-linux-musl
             binary_name: tgv
             archive_name: tgv-x86_64-linux-musl.tar.gz
-            archive_cmd: tar czvf tgv-x86_64-linux-musl.tar.gz tgv
+            archive_cmd: tar czvf dist/tgv-x86_64-linux-musl.tar.gz -C target/x86_64-unknown-linux-musl/release tgv
           - os: macos-latest
             platform: macos-arm
             target: aarch64-apple-darwin
             binary_name: tgv
             archive_name: tgv-aarch64-apple-darwin.tar.gz
-            archive_cmd: tar czvf tgv-aarch64-apple-darwin.tar.gz tgv
+            archive_cmd: tar czvf dist/tgv-aarch64-apple-darwin.tar.gz -C target/aarch64-apple-darwin/release tgv
 
     steps:
       - uses: actions/checkout@v4
@@ -63,8 +63,7 @@ jobs:
       - name: Prepare binary
         run: |
           mkdir -p dist
-          cp target/${{ matrix.target }}/release/${{ matrix.binary_name }} dist/
-          cd dist && ${{ matrix.archive_cmd }}
+          ${{ matrix.archive_cmd }}
         shell: bash
 
       - name: Upload build artifacts
